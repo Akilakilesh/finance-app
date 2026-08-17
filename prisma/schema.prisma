@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// One row per Google account that has signed in.
+model User {
+  id             String    @id @default(cuid())
+  googleId       String    @unique
+  email          String    @unique
+  name           String
+  image          String
+  pinHash        String?
+  pinUpdatedAt   DateTime?
+  pinFailedCount Int       @default(0)
+  pinLockedUntil DateTime?
+  createdAt      DateTime  @default(now())
+  lastLoginAt    DateTime  @default(now())
+
+  @@map("users")
+}
+
+model AppState {
+  userId    String
+  key       String
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, key])
+  @@map("app_state")
+}
+
+model Asset {
+  id            String   @id @default(cuid())
+  userId        String   @default("")
+  name          String
+  categoryId    String
+  type          String
+  institution   String
+  investedAmount Float
+  currentValue  Float
+  startDate     String
+  notes         String
+  debtDetails   Json?
+  source        Json?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("assets")
+}
+
+model Liability {
+  id               String   @id @default(cuid())
+  userId           String   @default("")
+  name             String
+  type             String
+  lender           String
+  originalAmount   Float
+  outstandingAmount Float
+  interestRate     Float
+  startDate        String
+  endDate          String
+  emiAmount        Float
+  notes            String
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
+  @@map("liabilities")
+}
+
+model Goal {
+  id            String   @id @default(cuid())
+  userId        String   @default("")
+  name          String
+  description   String
+  targetAmount  Float
+  targetDate    String
+  linkedAssetIds Json
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@map("goals")
+}

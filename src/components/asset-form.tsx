@@ -2,8 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  buildDebtDetails,
+  DebtFields,
+  debtValuesFromDetails,
+  defaultDebtValues,
+  type DebtValues,
+} from "@/components/debt-fields";
 import { Field, Select, TextArea, TextInput } from "@/components/form";
 import { Button, Card } from "@/components/ui";
+import { debtKindForType, valueDebtAsset, type DebtKind } from "@/lib/debt";
 import { useStore } from "@/lib/store";
 import { ASSET_CATEGORIES, type Asset, type AssetCategory } from "@/lib/types";
 
@@ -36,6 +44,11 @@ function toNumber(value: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+/** "FD / RD" covers two instruments, so the deposit style is picked separately. */
+function isDepositType(type: string): boolean {
+  return type === "FD / RD";
+}
+
 export function AssetForm({
   category,
   type,
@@ -61,10 +74,26 @@ export function AssetForm({
           notes: "",
         },
   );
+  const [depositKind, setDepositKind] = useState<DebtKind>(
+    asset?.debtDetails?.kind === "rd" ? "rd" : "fd",
+  );
+  const [debtValues, setDebtValues] = useState<DebtValues>(() => {
+    const initialKind = debtKindForType(
+      asset?.categoryId ?? category.id,
+      asset?.type ?? type,
+    );
+    if (!initialKind) return {};
+    if (asset?.debtDetails) return debtValuesFromDetails(asset.debtDetails);
+    return defaultDebtValues(initialKind);
+  });
   const [error, setError] = useState("");
 
   const selectedCategory =
     ASSET_CATEGORIES.find((c) => c.id === values.categoryId) ?? category;
+
+  const baseKind = debtKindForType(values.categoryId, values.type);
+  const debtKind =
+    baseKind === "fd" && isDepositType(values.type) ? depositKind : baseKind;
 
   function set<K extends keyof AssetFormValues>(
     key: K,
@@ -73,34 +102,57 @@ export function AssetForm({
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
-  function handleSubmit(event: React.FormEvent) {
+  function switchDebtKind(nextKind: DebtKind | undefined) {
+    setDebtValues(nextKind ? defaultDebtValues(nextKind) : {});
+  }
+
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!values.name.trim()) {
       setError("Please give this asset a name.");
       return;
     }
+
+    const debtDetails = debtKind
+      ? buildDebtDetails(debtKind, debtValues)
+      : undefined;
+    const valuation = debtDetails ? valueDebtAsset(debtDetails) : undefined;
+
     const payload = {
       name: values.name.trim(),
       categoryId: values.categoryId,
       type: values.type,
       institution: values.institution.trim(),
-      investedAmount: toNumber(values.investedAmount),
-      currentValue: toNumber(values.currentValue || values.investedAmount),
-      startDate: values.startDate,
+      investedAmount: valuation
+        ? valuation.invested
+        : toNumber(values.investedAmount),
+      currentValue: valuation
+        ? valuation.currentValue
+        : toNumber(values.currentValue || values.investedAmount),
+      startDate: debtDetails ? debtDetails.startDate : values.startDate,
       notes: values.notes.trim(),
+      debtDetails,
     };
-    if (asset) {
-      updateAsset(asset.id, payload);
-      router.push(`/assets/${asset.id}`);
-    } else {
-      const created = addAsset(payload);
-      router.push(`/assets/${created.id}`);
+    try {
+      if (asset) {
+        await updateAsset(asset.id, payload);
+        router.push(`/assets/${asset.id}`);
+      } else {
+        const created = await addAsset(payload);
+        router.push(`/assets/${created.id}`);
+      }
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error
+          ? saveError.message
+          : "Could not save this asset.",
+      );
     }
   }
 
   return (
     <Card>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
         <Field label="Asset name" hint="Example: HDFC Flexi Cap Fund">
           <TextInput
             value={values.name}
@@ -118,11 +170,14 @@ export function AssetForm({
                   (c) => c.id === e.target.value,
                 );
                 if (!nextCategory) return;
+                const nextType = nextCategory.types[0];
                 setValues((prev) => ({
                   ...prev,
                   categoryId: nextCategory.id,
-                  type: nextCategory.types[0],
+                  type: nextType,
                 }));
+                setDepositKind("fd");
+                switchDebtKind(debtKindForType(nextCategory.id, nextType));
               }}
             >
               {ASSET_CATEGORIES.map((c) => (
@@ -136,7 +191,13 @@ export function AssetForm({
           <Field label="Type">
             <Select
               value={values.type}
-              onChange={(e) => set("type", e.target.value)}
+              onChange={(e) => {
+                set("type", e.target.value);
+                setDepositKind("fd");
+                switchDebtKind(
+                  debtKindForType(values.categoryId, e.target.value),
+                );
+              }}
             >
               {selectedCategory.types.map((t) => (
                 <option key={t} value={t}>
@@ -155,36 +216,66 @@ export function AssetForm({
           />
         </Field>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Money you put in (₹)">
-            <TextInput
-              type="number"
-              min="0"
-              step="any"
-              value={values.investedAmount}
-              onChange={(e) => set("investedAmount", e.target.value)}
-              placeholder="0"
-            />
-          </Field>
-          <Field label="Value today (₹)" hint="Update this anytime">
-            <TextInput
-              type="number"
-              min="0"
-              step="any"
-              value={values.currentValue}
-              onChange={(e) => set("currentValue", e.target.value)}
-              placeholder="0"
-            />
-          </Field>
-        </div>
+        {debtKind ? (
+          <div className="space-y-4">
+            {isDepositType(values.type) ? (
+              <Field label="Deposit type">
+                <Select
+                  value={depositKind}
+                  onChange={(e) => {
+                    const nextKind = e.target.value as DebtKind;
+                    setDepositKind(nextKind);
+                    switchDebtKind(nextKind);
+                  }}
+                >
+                  <option value="fd">Fixed deposit (one time)</option>
+                  <option value="rd">Recurring deposit (every month)</option>
+                </Select>
+              </Field>
+            ) : null}
 
-        <Field label="Started on">
-          <TextInput
-            type="date"
-            value={values.startDate}
-            onChange={(e) => set("startDate", e.target.value)}
-          />
-        </Field>
+            <DebtFields
+              kind={debtKind}
+              values={debtValues}
+              onChange={(key, value) =>
+                setDebtValues((prev) => ({ ...prev, [key]: value }))
+              }
+            />
+          </div>
+        ) : (
+          <>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Money you put in (₹)">
+                <TextInput
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={values.investedAmount}
+                  onChange={(e) => set("investedAmount", e.target.value)}
+                  placeholder="0"
+                />
+              </Field>
+              <Field label="Value today (₹)" hint="Update this anytime">
+                <TextInput
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={values.currentValue}
+                  onChange={(e) => set("currentValue", e.target.value)}
+                  placeholder="0"
+                />
+              </Field>
+            </div>
+
+            <Field label="Started on">
+              <TextInput
+                type="date"
+                value={values.startDate}
+                onChange={(e) => set("startDate", e.target.value)}
+              />
+            </Field>
+          </>
+        )}
 
         <Field label="Notes">
           <TextArea
