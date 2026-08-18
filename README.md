@@ -45,7 +45,7 @@ Picking **Equity → Equity Mutual Fund / Direct Stock / ETF Fund** opens one sh
 - **Today's NAV / price** is fetched for the instrument you picked, and the asset page refreshes it when it is more than 6 hours old (there is also a **Refresh** button). You can type a price in yourself if the lookup fails.
 - **Current value = units × today's price**, so you never type the value today.
 - Mutual funds add investment mode (**SIP / lump sum**), folio, and — for SIP — the SIP amount and the day of the month it is debited. Stocks and ETFs add dividend received and the demat / broker.
-- Every holding can be linked to a goal straight from the form.
+- The asset is named after the fund or symbol you picked, so there is no separate name to type. Link it to a goal from the goal itself.
 
 Lookups go through `/api/market/search` and `/api/market/quote` so nothing is called from the browser directly.
 

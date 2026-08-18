@@ -96,7 +96,7 @@ export function AssetForm({
   asset?: Asset;
 }) {
   const router = useRouter();
-  const { goals, addAsset, updateAsset, updateGoal } = useStore();
+  const { addAsset, updateAsset } = useStore();
   const [values, setValues] = useState<AssetFormValues>(
     asset
       ? toValues(asset)
@@ -132,9 +132,6 @@ export function AssetForm({
     if (asset?.equityDetails) return equityValuesFromDetails(asset.equityDetails);
     return defaultEquityValues(initialKind);
   });
-  const [goalId, setGoalId] = useState(
-    () => goals.find((goal) => asset && goal.linkedAssetIds.includes(asset.id))?.id ?? "",
-  );
   const [error, setError] = useState("");
 
   const selectedCategory =
@@ -166,24 +163,6 @@ export function AssetForm({
   const patchEquity = useCallback((patch: EquityValues) => {
     setEquityValues((prev) => applyEquityPatch(prev, patch));
   }, []);
-
-  /** A goal keeps a list of asset ids, so linking is a change to the goal. */
-  async function syncGoalLink(assetId: string) {
-    const previous = goals.find((goal) => goal.linkedAssetIds.includes(assetId));
-    if (previous?.id === goalId) return;
-
-    if (previous) {
-      await updateGoal(previous.id, {
-        linkedAssetIds: previous.linkedAssetIds.filter((id) => id !== assetId),
-      });
-    }
-    const next = goals.find((goal) => goal.id === goalId);
-    if (next) {
-      await updateGoal(next.id, {
-        linkedAssetIds: [...next.linkedAssetIds, assetId],
-      });
-    }
-  }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -250,11 +229,9 @@ export function AssetForm({
     try {
       if (asset) {
         await updateAsset(asset.id, payload);
-        await syncGoalLink(asset.id);
         router.push(`/assets/${asset.id}`);
       } else {
         const created = await addAsset(payload);
-        await syncGoalLink(created.id);
         router.push(`/assets/${created.id}`);
       }
     } catch (saveError) {
@@ -269,24 +246,15 @@ export function AssetForm({
   return (
     <Card>
       <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
-        <Field
-          label="Asset name"
-          hint={
-            equityKind
-              ? "Optional — the name of what you picked is used when this is empty"
-              : "Example: HDFC Flexi Cap Fund"
-          }
-        >
-          <TextInput
-            value={values.name}
-            onChange={(e) => set("name", e.target.value)}
-            placeholder={
-              equityKind
-                ? equityValues.instrumentName || "What do you call this holding?"
-                : "What do you call this investment?"
-            }
-          />
-        </Field>
+        {equityKind ? null : (
+          <Field label="Asset name" hint="Example: HDFC Flexi Cap Fund">
+            <TextInput
+              value={values.name}
+              onChange={(e) => set("name", e.target.value)}
+              placeholder="What do you call this investment?"
+            />
+          </Field>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Category">
@@ -407,17 +375,6 @@ export function AssetForm({
             </Field>
           </>
         )}
-
-        <Field label="Goal linked" hint="Optional">
-          <Select value={goalId} onChange={(e) => setGoalId(e.target.value)}>
-            <option value="">Not linked to a goal</option>
-            {goals.map((goal) => (
-              <option key={goal.id} value={goal.id}>
-                {goal.name}
-              </option>
-            ))}
-          </Select>
-        </Field>
 
         <Field label="Notes">
           <TextArea
