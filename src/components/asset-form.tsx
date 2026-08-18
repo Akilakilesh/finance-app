@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   buildDebtDetails,
   DebtFields,
@@ -9,9 +9,18 @@ import {
   defaultDebtValues,
   type DebtValues,
 } from "@/components/debt-fields";
+import {
+  applyEquityPatch,
+  buildEquityDetails,
+  defaultEquityValues,
+  EquityFields,
+  equityValuesFromDetails,
+  type EquityValues,
+} from "@/components/equity-fields";
 import { Field, Select, TextArea, TextInput } from "@/components/form";
 import { Button, Card } from "@/components/ui";
 import { debtKindForType, valueDebtAsset, type DebtKind } from "@/lib/debt";
+import { equityKindForType, valueEquityAsset } from "@/lib/equity";
 import { useStore } from "@/lib/store";
 import { ASSET_CATEGORIES, type Asset, type AssetCategory } from "@/lib/types";
 
@@ -49,6 +58,34 @@ function isDepositType(type: string): boolean {
   return type === "FD / RD";
 }
 
+/** Where the holding is kept, worded for the kind of asset it is. */
+function institutionLabel(categoryId: string, type: string): {
+  label: string;
+  hint: string;
+  placeholder: string;
+} {
+  const equityKind = equityKindForType(categoryId, type);
+  if (equityKind === "mutual-fund") {
+    return {
+      label: "Where is it kept?",
+      hint: "Platform or AMC",
+      placeholder: "Example: Groww, Zerodha Coin",
+    };
+  }
+  if (equityKind) {
+    return {
+      label: "Demat / broker",
+      hint: "Optional",
+      placeholder: "Example: Zerodha, Groww",
+    };
+  }
+  return {
+    label: "Where is it kept?",
+    hint: "Bank, app or company name",
+    placeholder: "Example: Zerodha, SBI",
+  };
+}
+
 export function AssetForm({
   category,
   type,
@@ -59,7 +96,7 @@ export function AssetForm({
   asset?: Asset;
 }) {
   const router = useRouter();
-  const { addAsset, updateAsset } = useStore();
+  const { goals, addAsset, updateAsset, updateGoal } = useStore();
   const [values, setValues] = useState<AssetFormValues>(
     asset
       ? toValues(asset)
@@ -86,6 +123,18 @@ export function AssetForm({
     if (asset?.debtDetails) return debtValuesFromDetails(asset.debtDetails);
     return defaultDebtValues(initialKind);
   });
+  const [equityValues, setEquityValues] = useState<EquityValues>(() => {
+    const initialKind = equityKindForType(
+      asset?.categoryId ?? category.id,
+      asset?.type ?? type,
+    );
+    if (!initialKind) return {};
+    if (asset?.equityDetails) return equityValuesFromDetails(asset.equityDetails);
+    return defaultEquityValues(initialKind);
+  });
+  const [goalId, setGoalId] = useState(
+    () => goals.find((goal) => asset && goal.linkedAssetIds.includes(asset.id))?.id ?? "",
+  );
   const [error, setError] = useState("");
 
   const selectedCategory =
@@ -94,6 +143,8 @@ export function AssetForm({
   const baseKind = debtKindForType(values.categoryId, values.type);
   const debtKind =
     baseKind === "fd" && isDepositType(values.type) ? depositKind : baseKind;
+  const equityKind = equityKindForType(values.categoryId, values.type);
+  const institution = institutionLabel(values.categoryId, values.type);
 
   function set<K extends keyof AssetFormValues>(
     key: K,
@@ -106,20 +157,80 @@ export function AssetForm({
     setDebtValues(nextKind ? defaultDebtValues(nextKind) : {});
   }
 
+  function switchKinds(nextCategoryId: string, nextType: string) {
+    switchDebtKind(debtKindForType(nextCategoryId, nextType));
+    const nextEquityKind = equityKindForType(nextCategoryId, nextType);
+    setEquityValues(nextEquityKind ? defaultEquityValues(nextEquityKind) : {});
+  }
+
+  const patchEquity = useCallback((patch: EquityValues) => {
+    setEquityValues((prev) => applyEquityPatch(prev, patch));
+  }, []);
+
+  /** A goal keeps a list of asset ids, so linking is a change to the goal. */
+  async function syncGoalLink(assetId: string) {
+    const previous = goals.find((goal) => goal.linkedAssetIds.includes(assetId));
+    if (previous?.id === goalId) return;
+
+    if (previous) {
+      await updateGoal(previous.id, {
+        linkedAssetIds: previous.linkedAssetIds.filter((id) => id !== assetId),
+      });
+    }
+    const next = goals.find((goal) => goal.id === goalId);
+    if (next) {
+      await updateGoal(next.id, {
+        linkedAssetIds: [...next.linkedAssetIds, assetId],
+      });
+    }
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!values.name.trim()) {
-      setError("Please give this asset a name.");
+    const equityDetails = equityKind
+      ? buildEquityDetails(equityKind, equityValues)
+      : undefined;
+    const name = values.name.trim() || equityDetails?.instrumentName.trim() || "";
+
+    if (!name) {
+      setError(
+        equityKind
+          ? "Please pick the fund or share this holding is in."
+          : "Please give this asset a name.",
+      );
+      return;
+    }
+    if (equityDetails && !(equityDetails.units > 0)) {
+      setError(
+        equityKind === "mutual-fund"
+          ? "Please enter how many units you hold."
+          : "Please enter the quantity you hold.",
+      );
+      return;
+    }
+    if (equityDetails && !(equityDetails.investedAmount > 0)) {
+      setError("Please enter the total amount you put in.");
+      return;
+    }
+    if (
+      equityDetails?.mode === "sip" &&
+      (!((equityDetails.sipAmount ?? 0) > 0) || !((equityDetails.sipDay ?? 0) > 0))
+    ) {
+      setError("Please enter the SIP amount and the day it is debited.");
       return;
     }
 
     const debtDetails = debtKind
       ? buildDebtDetails(debtKind, debtValues)
       : undefined;
-    const valuation = debtDetails ? valueDebtAsset(debtDetails) : undefined;
+    const valuation = debtDetails
+      ? valueDebtAsset(debtDetails)
+      : equityDetails
+        ? valueEquityAsset(equityDetails)
+        : undefined;
 
     const payload = {
-      name: values.name.trim(),
+      name,
       categoryId: values.categoryId,
       type: values.type,
       institution: values.institution.trim(),
@@ -129,16 +240,21 @@ export function AssetForm({
       currentValue: valuation
         ? valuation.currentValue
         : toNumber(values.currentValue || values.investedAmount),
-      startDate: debtDetails ? debtDetails.startDate : values.startDate,
+      startDate: debtDetails
+        ? debtDetails.startDate
+        : (equityDetails?.investmentDate ?? values.startDate),
       notes: values.notes.trim(),
       debtDetails,
+      equityDetails,
     };
     try {
       if (asset) {
         await updateAsset(asset.id, payload);
+        await syncGoalLink(asset.id);
         router.push(`/assets/${asset.id}`);
       } else {
         const created = await addAsset(payload);
+        await syncGoalLink(created.id);
         router.push(`/assets/${created.id}`);
       }
     } catch (saveError) {
@@ -153,11 +269,22 @@ export function AssetForm({
   return (
     <Card>
       <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
-        <Field label="Asset name" hint="Example: HDFC Flexi Cap Fund">
+        <Field
+          label="Asset name"
+          hint={
+            equityKind
+              ? "Optional — the name of what you picked is used when this is empty"
+              : "Example: HDFC Flexi Cap Fund"
+          }
+        >
           <TextInput
             value={values.name}
             onChange={(e) => set("name", e.target.value)}
-            placeholder="What do you call this investment?"
+            placeholder={
+              equityKind
+                ? equityValues.instrumentName || "What do you call this holding?"
+                : "What do you call this investment?"
+            }
           />
         </Field>
 
@@ -177,7 +304,7 @@ export function AssetForm({
                   type: nextType,
                 }));
                 setDepositKind("fd");
-                switchDebtKind(debtKindForType(nextCategory.id, nextType));
+                switchKinds(nextCategory.id, nextType);
               }}
             >
               {ASSET_CATEGORIES.map((c) => (
@@ -194,9 +321,7 @@ export function AssetForm({
               onChange={(e) => {
                 set("type", e.target.value);
                 setDepositKind("fd");
-                switchDebtKind(
-                  debtKindForType(values.categoryId, e.target.value),
-                );
+                switchKinds(values.categoryId, e.target.value);
               }}
             >
               {selectedCategory.types.map((t) => (
@@ -208,15 +333,21 @@ export function AssetForm({
           </Field>
         </div>
 
-        <Field label="Where is it kept?" hint="Bank, app or company name">
+        <Field label={institution.label} hint={institution.hint}>
           <TextInput
             value={values.institution}
             onChange={(e) => set("institution", e.target.value)}
-            placeholder="Example: Zerodha, SBI"
+            placeholder={institution.placeholder}
           />
         </Field>
 
-        {debtKind ? (
+        {equityKind ? (
+          <EquityFields
+            kind={equityKind}
+            values={equityValues}
+            onPatch={patchEquity}
+          />
+        ) : debtKind ? (
           <div className="space-y-4">
             {isDepositType(values.type) ? (
               <Field label="Deposit type">
@@ -276,6 +407,17 @@ export function AssetForm({
             </Field>
           </>
         )}
+
+        <Field label="Goal linked" hint="Optional">
+          <Select value={goalId} onChange={(e) => setGoalId(e.target.value)}>
+            <option value="">Not linked to a goal</option>
+            {goals.map((goal) => (
+              <option key={goal.id} value={goal.id}>
+                {goal.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
 
         <Field label="Notes">
           <TextArea

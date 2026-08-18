@@ -38,6 +38,17 @@ Debt assets ask for how the instrument works instead of asking you for the value
 
 Tenure can be entered in **days, months or years**. The value today, the money put in so far and the maturity value are derived from those inputs and are recalculated as time passes. Each debt form (and the asset page) shows a "How is this calculated?" panel at the top with the exact formula used for that instrument.
 
+### Equity mutual funds, stocks and ETFs are calculated too
+Picking **Equity → Equity Mutual Fund / Direct Stock / ETF Fund** opens one shared holding form:
+- **Fund / symbol** is searched live — mutual funds come from the full AMFI scheme list (`api.mfapi.in`), stocks and ETFs from Yahoo Finance filtered to NSE / BSE listings.
+- **Units (or quantity), average buy NAV / price and total invested** stay in step: type any two and the third is worked out for you.
+- **Today's NAV / price** is fetched for the instrument you picked, and the asset page refreshes it when it is more than 6 hours old (there is also a **Refresh** button). You can type a price in yourself if the lookup fails.
+- **Current value = units × today's price**, so you never type the value today.
+- Mutual funds add investment mode (**SIP / lump sum**), folio, and — for SIP — the SIP amount and the day of the month it is debited. Stocks and ETFs add dividend received and the demat / broker.
+- Every holding can be linked to a goal straight from the form.
+
+Lookups go through `/api/market/search` and `/api/market/quote` so nothing is called from the browser directly.
+
 ### Groww sync
 Connect a Groww account under **Connections** and your Groww holdings appear as assets on their own:
 - Sign in with a daily access token, an API key + secret, or an API key + TOTP from the Groww Trading API.

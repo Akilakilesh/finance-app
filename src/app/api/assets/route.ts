@@ -27,6 +27,10 @@ function sanitizeAssetInput(payload: unknown): Partial<Asset> {
     notes: typeof value.notes === "string" ? value.notes : "",
     debtDetails:
       value.debtDetails !== undefined ? (value.debtDetails as Asset["debtDetails"]) : undefined,
+    equityDetails:
+      value.equityDetails !== undefined
+        ? (value.equityDetails as Asset["equityDetails"])
+        : undefined,
     source: value.source !== undefined ? (value.source as Asset["source"]) : undefined,
     createdAt:
       typeof value.createdAt === "string" ? value.createdAt : new Date().toISOString(),
@@ -68,6 +72,9 @@ export async function POST(request: Request) {
         notes: payload.notes ?? "",
         ...(payload.debtDetails !== undefined && {
           debtDetails: payload.debtDetails as unknown as Prisma.InputJsonValue,
+        }),
+        ...(payload.equityDetails !== undefined && {
+          equityDetails: payload.equityDetails as unknown as Prisma.InputJsonValue,
         }),
         ...(payload.source !== undefined && {
           source: payload.source as unknown as Prisma.InputJsonValue,
