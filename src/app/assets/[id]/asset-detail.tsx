@@ -15,6 +15,7 @@ import {
 } from "@/components/ui";
 import { assetProfitLoss, assetProfitLossPercent } from "@/lib/calculations";
 import { DebtFormulaPanel } from "@/components/debt-fields";
+import { EquityCard } from "@/components/equity-card";
 import { valueDebtAsset } from "@/lib/debt";
 import { formatCurrency, formatDate, formatDateTime, formatPercent } from "@/lib/format";
 import { useGrowwSync } from "@/lib/groww/use-groww";
@@ -149,6 +150,8 @@ export function AssetDetail({ assetId }: { assetId: string }) {
             )}
           </div>
         </Card>
+      ) : asset.equityDetails ? (
+        <EquityCard asset={asset} />
       ) : debtDetails && valuation ? (
         <Card>
           <h2 className="text-base font-semibold text-slate-900">

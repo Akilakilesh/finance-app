@@ -1,4 +1,5 @@
 import type { DebtDetails } from "./debt";
+import type { EquityDetails } from "./equity";
 import type { AssetSource } from "./groww/types";
 
 export type AssetCategoryId =
@@ -114,6 +115,8 @@ export interface Asset {
   notes: string;
   /** Set for debt assets: the inputs its value is calculated from. */
   debtDetails?: DebtDetails;
+  /** Set for funds, shares and ETFs: the holding its value is calculated from. */
+  equityDetails?: EquityDetails;
   /** Set when the asset is synced from a provider such as Groww. */
   source?: AssetSource;
   createdAt: string;

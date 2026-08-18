@@ -1,6 +1,7 @@
 import type { Asset, Goal, Liability } from "@/lib/types";
 import type { AssetSource } from "@/lib/groww/types";
 import type { DebtDetails } from "@/lib/debt";
+import type { EquityDetails } from "@/lib/equity";
 import type { AssetCategoryId } from "@/lib/types";
 import type {
   Asset as AssetRecord,
@@ -20,6 +21,7 @@ export function normalizeAsset(record: AssetRecord): Asset {
     startDate: record.startDate,
     notes: record.notes ?? "",
     debtDetails: (record.debtDetails as DebtDetails | null) ?? undefined,
+    equityDetails: (record.equityDetails as EquityDetails | null) ?? undefined,
     source: (record.source as AssetSource | null) ?? undefined,
     createdAt: record.createdAt.toISOString(),
   };

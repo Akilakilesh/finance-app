@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useSyncExternalStore } from "react";
-import { deriveAsset } from "./debt";
+import { deriveAsset } from "./derive";
 import { mergeGrowwHoldings } from "./groww/merge";
 import { mergeMfHoldings, type MfImportResult } from "./groww/mf-import";
 import type {

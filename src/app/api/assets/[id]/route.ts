@@ -25,6 +25,10 @@ function sanitizeAssetInput(payload: unknown): Partial<Asset> {
     startDate: typeof value.startDate === "string" ? value.startDate : undefined,
     notes: typeof value.notes === "string" ? value.notes : undefined,
     debtDetails: value.debtDetails !== undefined ? (value.debtDetails as Asset["debtDetails"]) : undefined,
+    equityDetails:
+      value.equityDetails !== undefined
+        ? (value.equityDetails as Asset["equityDetails"])
+        : undefined,
     source: value.source !== undefined ? (value.source as Asset["source"]) : undefined,
   };
 }
@@ -86,6 +90,9 @@ export async function PATCH(
         ...(payload.notes !== undefined && { notes: payload.notes }),
         ...(payload.debtDetails !== undefined && {
           debtDetails: payload.debtDetails as unknown as Prisma.InputJsonValue,
+        }),
+        ...(payload.equityDetails !== undefined && {
+          equityDetails: payload.equityDetails as unknown as Prisma.InputJsonValue,
         }),
         ...(payload.source !== undefined && {
           source: payload.source as unknown as Prisma.InputJsonValue,
