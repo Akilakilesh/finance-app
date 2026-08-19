@@ -36,9 +36,9 @@ export function PinForm({
   const [busy, setBusy] = useState(false);
 
   const fieldClass = "flex flex-col gap-1.5";
-  const labelClass = "text-sm font-medium text-slate-600";
+  const labelClass = "text-sm font-medium text-foreground";
   const inputClass =
-    "w-full max-w-[13rem] rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-2xl leading-8 tracking-[0.5em] indent-[0.5em] text-slate-900 focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 focus:outline-none";
+    "w-full max-w-[13rem] rounded-xl border border-input bg-card px-4 py-3 text-center text-2xl leading-8 tracking-[0.5em] indent-[0.5em] text-foreground shadow-sm transition-colors duration-150 hover:border-foreground/25 focus:border-foreground focus:ring-2 focus:ring-ring/15 focus:outline-none";
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -75,8 +75,12 @@ export function PinForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
+        <h2 className="text-xl font-semibold tracking-tight text-foreground">
+          {title}
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground text-pretty">
+          {description}
+        </p>
       </div>
 
       {askCurrent ? (
@@ -136,7 +140,7 @@ export function PinForm({
       ) : null}
 
       {error ? (
-        <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <p className="rounded-xl border border-negative/20 bg-negative/10 px-4 py-3 text-sm text-negative">
           {error}
         </p>
       ) : null}

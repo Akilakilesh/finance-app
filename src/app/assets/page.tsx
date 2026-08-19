@@ -69,15 +69,15 @@ export default function AssetsPage() {
           return (
             <section key={category.id} className="space-y-3">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-zinc-900">
                   <span className="mr-2">{category.icon}</span>
                   {category.name}
-                  <span className="ml-2 text-sm font-normal text-slate-500">
+                  <span className="ml-2 text-sm font-normal text-zinc-500">
                     {categoryAssets.length}{" "}
                     {categoryAssets.length === 1 ? "asset" : "assets"}
                   </span>
                 </h2>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-zinc-600">
                   {formatCurrency(categoryTotals.current)}{" "}
                   <span
                     className={
@@ -93,7 +93,7 @@ export default function AssetsPage() {
 
               <Card className="overflow-x-auto p-0">
                 <table className="w-full min-w-3xl text-left text-sm">
-                  <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+                  <thead className="border-b border-zinc-200 text-xs uppercase tracking-wide text-zinc-500">
                     <tr>
                       <th className="px-5 py-3">Asset</th>
                       <th className="px-5 py-3">Type</th>
@@ -109,22 +109,22 @@ export default function AssetsPage() {
                       return (
                         <tr
                           key={asset.id}
-                          className="border-b border-slate-100 last:border-0"
+                          className="border-b border-zinc-100 last:border-0"
                         >
                           <td className="px-5 py-3">
                             <Link
                               href={`/assets/${asset.id}`}
-                              className="font-medium text-slate-900 hover:underline"
+                              className="font-medium text-zinc-900 hover:underline"
                             >
                               {asset.name}
                             </Link>
                             {asset.institution ? (
-                              <p className="text-xs text-slate-500">
+                              <p className="text-xs text-zinc-500">
                                 {asset.institution}
                               </p>
                             ) : null}
                             {asset.source ? (
-                              <p className="text-xs text-slate-400">
+                              <p className="text-xs text-zinc-400">
                                 {asset.source.provider === "groww-file"
                                   ? "Imported from a Groww file"
                                   : asset.source.missingSince
@@ -138,10 +138,10 @@ export default function AssetsPage() {
                           <td className="px-5 py-3">
                             <Badge>{asset.type}</Badge>
                           </td>
-                          <td className="px-5 py-3 text-right text-slate-600">
+                          <td className="px-5 py-3 text-right text-zinc-600">
                             {formatCurrency(asset.investedAmount)}
                           </td>
-                          <td className="px-5 py-3 text-right font-medium text-slate-900">
+                          <td className="px-5 py-3 text-right font-medium text-zinc-900">
                             {formatCurrency(asset.currentValue)}
                           </td>
                           <td
@@ -157,7 +157,7 @@ export default function AssetsPage() {
                         </tr>
                       );
                     })}
-                    <tr className="bg-slate-50 text-sm font-medium text-slate-700">
+                    <tr className="bg-zinc-50 text-sm font-medium text-zinc-700">
                       <td className="px-5 py-3" colSpan={2}>
                         {category.name} total
                       </td>

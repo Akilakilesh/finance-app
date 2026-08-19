@@ -42,12 +42,12 @@ export default function GoalsPage() {
                   <div>
                     <Link
                       href={`/goals/${goal.id}`}
-                      className="text-lg font-semibold text-slate-900 hover:underline"
+                      className="text-lg font-semibold text-zinc-900 hover:underline"
                     >
                       {goal.name}
                     </Link>
                     {goal.description ? (
-                      <p className="text-sm text-slate-500">
+                      <p className="text-sm text-zinc-500">
                         {goal.description}
                       </p>
                     ) : null}
@@ -60,34 +60,34 @@ export default function GoalsPage() {
                 </div>
 
                 <div className="mt-3 grid gap-2 text-sm sm:grid-cols-4">
-                  <p className="text-slate-600">
+                  <p className="text-zinc-600">
                     Need: <br />
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-zinc-900">
                       {formatCurrency(goal.targetAmount)}
                     </span>
                   </p>
-                  <p className="text-slate-600">
+                  <p className="text-zinc-600">
                     Have now: <br />
                     <span className="font-medium text-emerald-600">
                       {formatCurrency(progress.currentAmount)}
                     </span>
                   </p>
-                  <p className="text-slate-600">
+                  <p className="text-zinc-600">
                     Still needed: <br />
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-zinc-900">
                       {formatCurrency(progress.remainingAmount)}
                     </span>
                   </p>
-                  <p className="text-slate-600">
+                  <p className="text-zinc-600">
                     Progress: <br />
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-zinc-900">
                       {progress.progressPercent.toFixed(0)}%
                     </span>
                   </p>
                 </div>
 
                 {progress.linkedAssets.length > 0 ? (
-                  <p className="mt-3 text-xs text-slate-500">
+                  <p className="mt-3 text-xs text-zinc-500">
                     Using:{" "}
                     {progress.linkedAssets.map((a) => a.name).join(", ")}
                   </p>

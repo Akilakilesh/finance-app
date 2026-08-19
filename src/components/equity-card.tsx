@@ -14,8 +14,8 @@ const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs text-slate-500">{label}</p>
-      <p className="text-sm font-medium text-slate-900">{value}</p>
+      <p className="text-xs text-zinc-500">{label}</p>
+      <p className="text-sm font-medium text-zinc-900">{value}</p>
     </div>
   );
 }
@@ -74,10 +74,10 @@ export function EquityCard({ asset }: { asset: Asset }) {
     <Card>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             {isFund ? "Fund holding" : "Market holding"}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-zinc-500">
             {details.instrumentName || details.instrumentId} · the value today is{" "}
             {labels.unitsLabel.toLowerCase()} × today&apos;s{" "}
             {isFund ? "NAV" : "price"}

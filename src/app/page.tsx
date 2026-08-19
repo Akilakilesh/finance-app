@@ -42,10 +42,10 @@ export default function DashboardPage() {
 
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">Assets</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">Assets</h2>
           <Link
             href="/assets"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-sm font-medium text-zinc-600 hover:text-zinc-900"
           >
             View all →
           </Link>
@@ -69,10 +69,10 @@ export default function DashboardPage() {
 
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">Liabilities</h2>
+          <h2 className="text-lg font-semibold text-zinc-900">Liabilities</h2>
           <Link
             href="/liabilities"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-sm font-medium text-zinc-600 hover:text-zinc-900"
           >
             View all →
           </Link>
@@ -87,12 +87,12 @@ export default function DashboardPage() {
 
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">
+          <h2 className="text-lg font-semibold text-zinc-900">
             Goals ({goals.length})
           </h2>
           <Link
             href="/goals"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-sm font-medium text-zinc-600 hover:text-zinc-900"
           >
             View all →
           </Link>
@@ -112,18 +112,18 @@ export default function DashboardPage() {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <Link
                       href={`/goals/${goal.id}`}
-                      className="text-base font-semibold text-slate-900 hover:underline"
+                      className="text-base font-semibold text-zinc-900 hover:underline"
                     >
                       {goal.name}
                     </Link>
-                    <span className="text-sm text-slate-500">
+                    <span className="text-sm text-zinc-500">
                       by {formatDate(goal.targetDate)}
                     </span>
                   </div>
                   <div className="mt-3">
                     <ProgressBar percent={progress.progressPercent} />
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">
+                  <p className="mt-2 text-sm text-zinc-600">
                     {formatCurrency(progress.currentAmount)} of{" "}
                     {formatCurrency(goal.targetAmount)} —{" "}
                     {progress.progressPercent.toFixed(0)}% done

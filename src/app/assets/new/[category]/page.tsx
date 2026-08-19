@@ -15,7 +15,7 @@ export default async function ChooseTypePage({
     <div>
       <Link
         href="/assets/new"
-        className="text-sm text-slate-500 hover:text-slate-900"
+        className="text-sm text-zinc-500 hover:text-zinc-900"
       >
         ← Back to categories
       </Link>
@@ -30,7 +30,7 @@ export default async function ChooseTypePage({
           <Link
             key={type}
             href={`/assets/new/${category.id}/${slugify(type)}`}
-            className="rounded-2xl border border-slate-200 bg-white p-5 text-base font-medium text-slate-900 shadow-sm transition-colors hover:border-slate-400"
+            className="rounded-2xl border border-zinc-200 bg-white p-5 text-base font-medium text-zinc-900 shadow-sm transition-colors hover:border-zinc-400"
           >
             {type}
           </Link>

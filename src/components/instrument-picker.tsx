@@ -72,10 +72,10 @@ export function InstrumentPicker({
   if (selectedId) {
     return (
       <Field label={label}>
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-muted/60 px-3 py-2">
           <div>
-            <p className="text-sm font-medium text-slate-900">{selectedName}</p>
-            <p className="text-xs text-slate-500">{selectedId}</p>
+            <p className="text-sm font-medium text-foreground">{selectedName}</p>
+            <p className="text-xs text-muted-foreground">{selectedId}</p>
           </div>
           <Button
             type="button"
@@ -100,11 +100,11 @@ export function InstrumentPicker({
         placeholder={placeholder}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <div className="mt-2 max-h-56 overflow-y-auto rounded-xl border border-slate-200">
+      <div className="mt-2 max-h-56 overflow-y-auto rounded-xl border border-border bg-card shadow-sm">
         {error ? (
-          <p className="px-3 py-2 text-sm text-rose-600">{error}</p>
+          <p className="px-3 py-2 text-sm text-negative">{error}</p>
         ) : options.length === 0 ? (
-          <p className="px-3 py-2 text-sm text-slate-500">
+          <p className="px-3 py-2 text-sm text-muted-foreground">
             {searching
               ? "Searching…"
               : query.trim()
@@ -112,18 +112,18 @@ export function InstrumentPicker({
                 : "Start typing to search."}
           </p>
         ) : (
-          <ul>
+          <ul className="p-1">
             {options.map((option) => (
               <li key={`${option.kind}-${option.id}`}>
                 <button
                   type="button"
                   onClick={() => onSelect(option)}
-                  className="block w-full px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50"
+                  className="block w-full rounded-lg px-3 py-2 text-left text-sm text-foreground transition-colors select-none hover:bg-accent active:scale-[0.99]"
                 >
-                  <span className="block font-medium text-slate-900">
+                  <span className="block font-medium text-foreground">
                     {option.name}
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-muted-foreground">
                     {[option.id, option.detail].filter(Boolean).join(" · ")}
                   </span>
                 </button>

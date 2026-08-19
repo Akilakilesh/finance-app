@@ -66,7 +66,7 @@ export function AssetDetail({ assetId }: { assetId: string }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/assets" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/assets" className="text-sm text-zinc-500 hover:text-zinc-900">
         ← Back to assets
       </Link>
 
@@ -110,12 +110,12 @@ export function AssetDetail({ assetId }: { assetId: string }) {
 
       {source ? (
         <Card>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             {source.provider === "groww"
               ? "Synced from Groww"
               : "Imported from a Groww file"}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-zinc-500">
             {source.provider === "groww"
               ? "The quantity and value come from your Groww demat holdings, so there is nothing to update by hand."
               : "These numbers come from the mutual fund file you uploaded. Upload a newer file to refresh them."}{" "}
@@ -154,29 +154,29 @@ export function AssetDetail({ assetId }: { assetId: string }) {
         <EquityCard asset={asset} />
       ) : debtDetails && valuation ? (
         <Card>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             How this value is calculated
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-zinc-500">
             The value today comes from the details of this investment, so there
             is nothing to update by hand. Edit the asset to change them.
           </p>
           <div className="mt-3">
             <DebtFormulaPanel kind={debtDetails.kind} />
           </div>
-          <ul className="mt-3 space-y-1 text-sm text-slate-600">
+          <ul className="mt-3 space-y-1 text-sm text-zinc-600">
             {valuation.explanation.map((line) => (
               <li key={line}>{line}</li>
             ))}
           </ul>
           {valuation.maturityValue !== undefined ? (
-            <p className="mt-3 text-sm text-slate-600">
+            <p className="mt-3 text-sm text-zinc-600">
               At maturity
               {valuation.maturityDate
                 ? ` on ${formatDate(valuation.maturityDate)}`
                 : ""}
               :{" "}
-              <span className="font-medium text-slate-900">
+              <span className="font-medium text-zinc-900">
                 {formatCurrency(valuation.maturityValue)}
               </span>
             </p>
@@ -184,10 +184,10 @@ export function AssetDetail({ assetId }: { assetId: string }) {
         </Card>
       ) : (
         <Card>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             Update value today
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-zinc-500">
             Check the latest value and update it here. Linked goals update
             automatically.
           </p>
@@ -214,17 +214,17 @@ export function AssetDetail({ assetId }: { assetId: string }) {
 
       {asset.notes ? (
         <Card>
-          <h2 className="text-base font-semibold text-slate-900">Notes</h2>
-          <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600">
+          <h2 className="text-base font-semibold text-zinc-900">Notes</h2>
+          <p className="mt-2 whitespace-pre-wrap text-sm text-zinc-600">
             {asset.notes}
           </p>
         </Card>
       ) : null}
 
       <Card>
-        <h2 className="text-base font-semibold text-slate-900">Used for goals</h2>
+        <h2 className="text-base font-semibold text-zinc-900">Used for goals</h2>
         {usedInGoals.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-zinc-500">
             This asset is not linked to any goal yet.
           </p>
         ) : (
@@ -233,7 +233,7 @@ export function AssetDetail({ assetId }: { assetId: string }) {
               <li key={goal.id}>
                 <Link
                   href={`/goals/${goal.id}`}
-                  className="text-slate-700 hover:underline"
+                  className="text-zinc-700 hover:underline"
                 >
                   {goal.name}
                 </Link>

@@ -45,7 +45,7 @@ export function LiabilityDetail({ liabilityId }: { liabilityId: string }) {
     <div className="space-y-6">
       <Link
         href="/liabilities"
-        className="text-sm text-slate-500 hover:text-slate-900"
+        className="text-sm text-zinc-500 hover:text-zinc-900"
       >
         ← Back to liabilities
       </Link>
@@ -89,33 +89,33 @@ export function LiabilityDetail({ liabilityId }: { liabilityId: string }) {
       </div>
 
       <Card>
-        <h2 className="text-base font-semibold text-slate-900">Details</h2>
+        <h2 className="text-base font-semibold text-zinc-900">Details</h2>
         <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-slate-500">Monthly payment / EMI</dt>
-            <dd className="text-slate-900">
+            <dt className="text-zinc-500">Monthly payment / EMI</dt>
+            <dd className="text-zinc-900">
               {liability.emiAmount > 0
                 ? formatCurrency(liability.emiAmount)
                 : "—"}
             </dd>
           </div>
           <div>
-            <dt className="text-slate-500">Interest rate</dt>
-            <dd className="text-slate-900">
+            <dt className="text-zinc-500">Interest rate</dt>
+            <dd className="text-zinc-900">
               {liability.interestRate > 0 ? `${liability.interestRate}%` : "—"}
             </dd>
           </div>
           <div>
-            <dt className="text-slate-500">Start date</dt>
-            <dd className="text-slate-900">{formatDate(liability.startDate)}</dd>
+            <dt className="text-zinc-500">Start date</dt>
+            <dd className="text-zinc-900">{formatDate(liability.startDate)}</dd>
           </div>
           <div>
-            <dt className="text-slate-500">End date</dt>
-            <dd className="text-slate-900">{formatDate(liability.endDate)}</dd>
+            <dt className="text-zinc-500">End date</dt>
+            <dd className="text-zinc-900">{formatDate(liability.endDate)}</dd>
           </div>
         </dl>
         {liability.notes ? (
-          <p className="mt-4 whitespace-pre-wrap text-sm text-slate-600">
+          <p className="mt-4 whitespace-pre-wrap text-sm text-zinc-600">
             {liability.notes}
           </p>
         ) : null}

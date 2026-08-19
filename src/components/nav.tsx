@@ -13,14 +13,26 @@ const LINKS = [
   { href: "/security", label: "Security" },
 ];
 
+const actionClass =
+  "rounded-lg px-3 py-1.5 text-sm font-medium text-white/70 transition-all duration-150 select-none hover:bg-white/10 hover:text-white active:scale-[0.96]";
+
 export function Nav() {
   const pathname = usePathname();
   const { user } = useAuth();
 
   return (
-    <header className="border-b border-slate-200 bg-white">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-surface/95 text-white backdrop-blur supports-[backdrop-filter]:bg-surface/80">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
-        <Link href="/" className="text-base font-semibold text-slate-900">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-base font-semibold tracking-tight text-white transition-opacity hover:opacity-80"
+        >
+          <span
+            aria-hidden
+            className="grid size-6 place-items-center rounded-md bg-white text-xs font-bold text-surface"
+          >
+            ₹
+          </span>
           My Money
         </Link>
         <nav className="flex flex-wrap gap-1">
@@ -33,10 +45,11 @@ export function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                aria-current={active ? "page" : undefined}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-150 select-none active:scale-[0.96] ${
                   active
-                    ? "bg-slate-900 text-white"
-                    : "text-slate-600 hover:bg-slate-100"
+                    ? "bg-white text-surface shadow-sm"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -46,22 +59,14 @@ export function Nav() {
         </nav>
         <div className="ml-auto flex items-center gap-1">
           {user ? (
-            <span className="mr-2 hidden max-w-[14rem] truncate text-sm text-slate-500 lg:inline">
+            <span className="mr-2 hidden max-w-[14rem] truncate text-sm text-white/50 lg:inline">
               {user.email}
             </span>
           ) : null}
-          <button
-            type="button"
-            onClick={() => void lockApp()}
-            className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100"
-          >
+          <button type="button" onClick={() => void lockApp()} className={actionClass}>
             Lock
           </button>
-          <button
-            type="button"
-            onClick={() => void signOut()}
-            className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100"
-          >
+          <button type="button" onClick={() => void signOut()} className={actionClass}>
             Sign out
           </button>
         </div>
