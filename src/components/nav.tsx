@@ -1,16 +1,27 @@
-"use client";
+- "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Wallet,
+  Landmark,
+  Target,
+  Link2,
+  ShieldCheck,
+  Lock,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
 import { lockApp, signOut, useAuth } from "@/lib/auth-client";
 
-const LINKS = [
-  { href: "/", label: "Dashboard" },
-  { href: "/assets", label: "Assets" },
-  { href: "/liabilities", label: "Liabilities" },
-  { href: "/goals", label: "Goals" },
-  { href: "/connections", label: "Connections" },
-  { href: "/security", label: "Security" },
+const LINKS: { href: string; label: string; icon: LucideIcon }[] = [
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/assets", label: "Assets", icon: Wallet },
+  { href: "/liabilities", label: "Liabilities", icon: Landmark },
+  { href: "/goals", label: "Goals", icon: Target },
+  { href: "/connections", label: "Connections", icon: Link2 },
+  { href: "/security", label: "Security", icon: ShieldCheck },
 ];
 
 const actionClass =
@@ -41,17 +52,19 @@ export function Nav() {
               link.href === "/"
                 ? pathname === "/"
                 : pathname.startsWith(link.href);
+            const Icon = link.icon;
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-150 select-none active:scale-[0.96] ${
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-150 select-none active:scale-[0.96] ${
                   active
                     ? "bg-white text-surface shadow-sm"
                     : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
               >
+                <Icon className="size-4" aria-hidden />
                 {link.label}
               </Link>
             );
@@ -64,9 +77,11 @@ export function Nav() {
             </span>
           ) : null}
           <button type="button" onClick={() => void lockApp()} className={actionClass}>
+            <Lock className="size-4" aria-hidden />
             Lock
           </button>
           <button type="button" onClick={() => void signOut()} className={actionClass}>
+            <LogOut className="size-4" aria-hidden />
             Sign out
           </button>
         </div>

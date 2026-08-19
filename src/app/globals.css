@@ -27,23 +27,23 @@
 }
 
 :root {
-  /* Grey + black theme */
-  --background: #f4f4f5; /* zinc-100 */
-  --foreground: #18181b; /* zinc-900 */
-  --surface: #09090b; /* near-black, used for the top bar */
+  /* Warm off-white + green theme */
+  --background: #f7f6f3; /* warm paper */
+  --foreground: #1c1b18; /* warm near-black */
+  --surface: #2b6e49; /* green, used for the top bar */
   --card: #ffffff;
-  --card-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a; /* zinc-500 */
-  --border: #e4e4e7; /* zinc-200 */
-  --input: #e4e4e7;
-  --ring: #18181b;
-  --primary: #09090b; /* near-black */
-  --primary-foreground: #fafafa;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
-  --positive: #059669; /* emerald-600, load-bearing for gains */
-  --negative: #e11d48; /* rose-600, load-bearing for losses */
+  --card-foreground: #1c1b18;
+  --muted: #efeee8; /* slightly deeper than background */
+  --muted-foreground: #6b6a62; /* warm grey */
+  --border: #e6e4dc; /* warm hairline */
+  --input: #e6e4dc;
+  --ring: #2b6e49;
+  --primary: #2b6e49; /* green */
+  --primary-foreground: #ffffff;
+  --accent: #edf2ee; /* faint green tint for hover */
+  --accent-foreground: #1c1b18;
+  --positive: #2b6e49; /* green, load-bearing for gains */
+  --negative: #c0392b; /* warm red, load-bearing for losses */
 
   --radius: 0.875rem;
 }
