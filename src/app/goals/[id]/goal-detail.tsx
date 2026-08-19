@@ -45,7 +45,7 @@ export function GoalDetail({ goalId }: { goalId: string }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/goals" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/goals" className="text-sm text-zinc-500 hover:text-zinc-900">
         ← Back to goals
       </Link>
 
@@ -66,7 +66,7 @@ export function GoalDetail({ goalId }: { goalId: string }) {
 
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p className="text-lg font-semibold text-slate-900">
+          <p className="text-lg font-semibold text-zinc-900">
             {progress.progressPercent.toFixed(0)}% done
           </p>
           <Badge>Need by {formatDate(goal.targetDate)}</Badge>
@@ -91,7 +91,7 @@ export function GoalDetail({ goalId }: { goalId: string }) {
 
       <Card>
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             Assets used for this goal
           </h2>
           <LinkButton
@@ -103,12 +103,12 @@ export function GoalDetail({ goalId }: { goalId: string }) {
           </LinkButton>
         </div>
         {progress.linkedAssets.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-500">
+          <p className="mt-3 text-sm text-zinc-500">
             No assets linked yet. Edit this goal to pick the exact assets you
             want to use.
           </p>
         ) : (
-          <ul className="mt-3 divide-y divide-slate-100">
+          <ul className="mt-3 divide-y divide-zinc-100">
             {progress.linkedAssets.map((asset) => (
               <li
                 key={asset.id}
@@ -117,15 +117,15 @@ export function GoalDetail({ goalId }: { goalId: string }) {
                 <div>
                   <Link
                     href={`/assets/${asset.id}`}
-                    className="text-sm font-medium text-slate-900 hover:underline"
+                    className="text-sm font-medium text-zinc-900 hover:underline"
                   >
                     {asset.name}
                   </Link>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-zinc-500">
                     {getCategory(asset.categoryId)?.name} · {asset.type}
                   </p>
                 </div>
-                <span className="text-sm font-medium text-slate-900">
+                <span className="text-sm font-medium text-zinc-900">
                   {formatCurrency(asset.currentValue)}
                 </span>
               </li>

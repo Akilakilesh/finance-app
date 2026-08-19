@@ -106,10 +106,10 @@ export function GoalForm({ goal }: { goal?: Goal }) {
       </Card>
 
       <Card>
-        <h2 className="text-base font-semibold text-slate-900">
+        <h2 className="text-base font-semibold text-zinc-900">
           Which assets are for this goal?
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-zinc-500">
           Tick the exact assets you want to use. You can pick only some of your
           mutual funds or bonds and keep the rest for other goals.
         </p>
@@ -122,10 +122,10 @@ export function GoalForm({ goal }: { goal?: Goal }) {
             onChange={setLinkedAssetIds}
           />
         </div>
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-zinc-600">
           Selected: {linkedAssetIds.length}{" "}
           {linkedAssetIds.length === 1 ? "asset" : "assets"} worth{" "}
-          <span className="font-semibold text-slate-900">
+          <span className="font-semibold text-zinc-900">
             {formatCurrency(linkedValue)}
           </span>
         </p>

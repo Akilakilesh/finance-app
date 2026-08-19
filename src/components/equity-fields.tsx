@@ -321,41 +321,41 @@ export function EquityFields({
       </div>
 
       {priceError ? (
-        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+        <p className="rounded-lg border border-negative/20 bg-negative/10 px-3 py-2 text-sm text-negative">
           {priceError} You can still type the {isFund ? "NAV" : "price"} in
           yourself.
         </p>
       ) : null}
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <p className="text-sm font-medium text-slate-700">
+      <div className="rounded-xl border border-border bg-muted/60 p-4">
+        <p className="text-sm font-medium text-foreground">
           Calculated for you — you do not enter the value today
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <div>
-            <p className="text-xs text-slate-500">Money put in</p>
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-xs text-muted-foreground">Money put in</p>
+            <p className="text-lg font-semibold text-foreground">
               {formatCurrency(valuation.invested)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500">Current value</p>
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-xs text-muted-foreground">Current value</p>
+            <p className="text-lg font-semibold text-foreground">
               {formatCurrency(valuation.currentValue)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500">Profit / loss</p>
+            <p className="text-xs text-muted-foreground">Profit / loss</p>
             <p
               className={`text-lg font-semibold ${
-                valuation.profit >= 0 ? "text-emerald-600" : "text-rose-600"
+                valuation.profit >= 0 ? "text-positive" : "text-negative"
               }`}
             >
               {formatCurrency(valuation.profit)}
             </p>
           </div>
         </div>
-        <ul className="mt-2 space-y-1 text-xs text-slate-500">
+        <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
           {valuation.explanation.map((line) => (
             <li key={line}>{line}</li>
           ))}

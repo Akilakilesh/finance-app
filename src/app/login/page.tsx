@@ -6,9 +6,9 @@ import Link from "next/link";
  */
 export default function LoginPage() {
   return (
-    <div className="text-sm text-slate-500">
+    <div className="text-sm text-zinc-500">
       You are signed in.{" "}
-      <Link href="/" className="font-medium text-slate-900 underline">
+      <Link href="/" className="font-medium text-zinc-900 underline">
         Go to the dashboard
       </Link>
       .

@@ -40,7 +40,7 @@ function SignInError() {
   if (!message) return null;
 
   return (
-    <p className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-700">
+    <p className="mt-4 rounded-xl border border-negative/20 bg-negative/10 px-4 py-3 text-sm text-negative">
       {message}
     </p>
   );
@@ -49,8 +49,16 @@ function SignInError() {
 function SignIn() {
   return (
     <Screen>
-      <h1 className="text-xl font-semibold text-slate-900">My Money</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <span
+        aria-hidden
+        className="mb-4 grid size-11 place-items-center rounded-xl bg-primary text-lg font-bold text-primary-foreground"
+      >
+        ₹
+      </span>
+      <h1 className="text-xl font-semibold tracking-tight text-foreground">
+        My Money
+      </h1>
+      <p className="mt-1 text-sm text-muted-foreground text-pretty">
         Sign in with Google to see your assets, liabilities and goals. Every
         account has its own data.
       </p>
@@ -59,7 +67,7 @@ function SignIn() {
       </Suspense>
       <a
         href="/api/auth/google/start"
-        className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+        className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-all duration-150 select-none hover:bg-primary/90 active:scale-[0.97]"
       >
         Continue with Google
       </a>
@@ -77,7 +85,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
   if (loading) {
     return (
       <Screen>
-        <p className="text-sm text-slate-500">Loading…</p>
+        <p className="text-sm text-muted-foreground">Loading…</p>
       </Screen>
     );
   }
@@ -104,7 +112,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
     return (
       <Screen>
-        <p className="mb-5 truncate text-sm text-slate-500">
+        <p className="mb-5 truncate text-sm text-muted-foreground">
           Signed in as {user.email}
         </p>
         {pinSet ? (

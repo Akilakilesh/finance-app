@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/ui";
 export default function NewGoalPage() {
   return (
     <div>
-      <Link href="/goals" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link href="/goals" className="text-sm text-zinc-500 hover:text-zinc-900">
         ← Back to goals
       </Link>
       <div className="mt-3">

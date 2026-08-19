@@ -284,24 +284,24 @@ export function DebtFormulaPanel({
   return (
     <details
       open={defaultOpen}
-      className="rounded-xl border border-slate-200 bg-white p-4 [&_summary]:list-none"
+      className="rounded-xl border border-border bg-card p-4 shadow-sm [&_summary]:list-none"
     >
-      <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm font-medium text-slate-700">
+      <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm font-medium text-foreground select-none">
         <span>How is this calculated? — {formula.title} formula</span>
-        <span className="text-xs text-slate-400">show / hide</span>
+        <span className="text-xs text-muted-foreground">show / hide</span>
       </summary>
       <div className="mt-3 space-y-3">
         <div className="space-y-1">
           {formula.lines.map((line) => (
             <p
               key={line}
-              className="rounded-lg bg-slate-900 px-3 py-2 font-mono text-xs text-slate-100"
+              className="rounded-lg bg-primary px-3 py-2 font-mono text-xs text-primary-foreground"
             >
               {line}
             </p>
           ))}
         </div>
-        <ul className="space-y-1 text-xs text-slate-500">
+        <ul className="space-y-1 text-xs text-muted-foreground">
           {formula.where.map((line) => (
             <li key={line}>{line}</li>
           ))}
@@ -378,28 +378,28 @@ export function DebtFields({
         ))}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <p className="text-sm font-medium text-slate-700">
+      <div className="rounded-xl border border-border bg-muted/60 p-4">
+        <p className="text-sm font-medium text-foreground">
           Calculated for you — you do not enter the value today
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <div>
-            <p className="text-xs text-slate-500">Money put in so far</p>
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-xs text-muted-foreground">Money put in so far</p>
+            <p className="text-lg font-semibold text-foreground">
               {formatCurrency(valuation.invested)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500">Value today</p>
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-xs text-muted-foreground">Value today</p>
+            <p className="text-lg font-semibold text-foreground">
               {formatCurrency(valuation.currentValue)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500">Interest earned so far</p>
+            <p className="text-xs text-muted-foreground">Interest earned so far</p>
             <p
               className={`text-lg font-semibold ${
-                profit >= 0 ? "text-emerald-600" : "text-rose-600"
+                profit >= 0 ? "text-positive" : "text-negative"
               }`}
             >
               {formatCurrency(profit)}
@@ -407,14 +407,14 @@ export function DebtFields({
           </div>
         </div>
         {valuation.maturityValue !== undefined ? (
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-muted-foreground">
             At maturity{valuation.maturityDate ? ` on ${formatDate(valuation.maturityDate)}` : ""}:{" "}
-            <span className="font-medium text-slate-900">
+            <span className="font-medium text-foreground">
               {formatCurrency(valuation.maturityValue)}
             </span>
           </p>
         ) : null}
-        <ul className="mt-2 space-y-1 text-xs text-slate-500">
+        <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
           {valuation.explanation.map((line) => (
             <li key={line}>{line}</li>
           ))}

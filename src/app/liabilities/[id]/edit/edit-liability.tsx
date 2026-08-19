@@ -25,7 +25,7 @@ export function EditLiability({ liabilityId }: { liabilityId: string }) {
     <div>
       <Link
         href={`/liabilities/${liability.id}`}
-        className="text-sm text-slate-500 hover:text-slate-900"
+        className="text-sm text-zinc-500 hover:text-zinc-900"
       >
         ← Back to liability
       </Link>

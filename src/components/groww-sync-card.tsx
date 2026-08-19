@@ -13,13 +13,13 @@ export function GrowwSyncCard() {
   if (!connection) {
     return (
       <Card className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-zinc-600">
           Investing through Groww? Connect it and your stocks and ETFs come in
           on their own.
         </p>
         <Link
           href="/connections"
-          className="text-sm font-medium text-slate-900 hover:underline"
+          className="text-sm font-medium text-zinc-900 hover:underline"
         >
           Connect Groww →
         </Link>
@@ -33,8 +33,8 @@ export function GrowwSyncCard() {
     <Card className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-slate-900">Groww</p>
-          <p className="text-xs text-slate-500">
+          <p className="text-sm font-medium text-zinc-900">Groww</p>
+          <p className="text-xs text-zinc-500">
             {syncing
               ? "Syncing…"
               : connection.lastSyncedAt
@@ -52,7 +52,7 @@ export function GrowwSyncCard() {
           </Button>
           <Link
             href="/connections"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-sm font-medium text-zinc-600 hover:text-zinc-900"
           >
             Manage
           </Link>
@@ -66,14 +66,14 @@ export function GrowwSyncCard() {
       ) : null}
 
       {gaps.length > 0 ? (
-        <details className="text-xs text-slate-500 [&_summary]:list-none">
-          <summary className="cursor-pointer font-medium text-slate-600">
+        <details className="text-xs text-zinc-500 [&_summary]:list-none">
+          <summary className="cursor-pointer font-medium text-zinc-600">
             {gaps.length} things Groww could not give us
           </summary>
           <ul className="mt-2 space-y-1">
             {gaps.map((gap) => (
               <li key={gap.area}>
-                <span className="font-medium text-slate-700">{gap.area}:</span>{" "}
+                <span className="font-medium text-zinc-700">{gap.area}:</span>{" "}
                 {gap.reason}
               </li>
             ))}

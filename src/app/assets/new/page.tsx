@@ -14,15 +14,15 @@ export default function ChooseCategoryPage() {
           <Link
             key={category.id}
             href={`/assets/new/${category.id}`}
-            className="rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition-colors hover:border-slate-400"
+            className="rounded-2xl border border-zinc-200 bg-white p-5 text-left shadow-sm transition-colors hover:border-zinc-400"
           >
             <span className="text-2xl" aria-hidden>
               {category.icon}
             </span>
-            <p className="mt-2 text-base font-semibold text-slate-900">
+            <p className="mt-2 text-base font-semibold text-zinc-900">
               {category.name}
             </p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-zinc-500">
               {category.description}
             </p>
           </Link>

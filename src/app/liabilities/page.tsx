@@ -50,22 +50,22 @@ export default function LiabilitiesPage() {
                 <div>
                   <Link
                     href={`/liabilities/${liability.id}`}
-                    className="text-base font-semibold text-slate-900 hover:underline"
+                    className="text-base font-semibold text-zinc-900 hover:underline"
                   >
                     {liability.name}
                   </Link>
                   {liability.lender ? (
-                    <p className="text-xs text-slate-500">{liability.lender}</p>
+                    <p className="text-xs text-zinc-500">{liability.lender}</p>
                   ) : null}
                 </div>
                 <Badge>{liability.type}</Badge>
               </div>
-              <p className="mt-4 text-sm text-slate-500">Still to be paid</p>
-              <p className="text-xl font-semibold text-slate-900">
+              <p className="mt-4 text-sm text-zinc-500">Still to be paid</p>
+              <p className="text-xl font-semibold text-zinc-900">
                 {formatCurrency(liability.outstandingAmount)}
               </p>
               {liability.emiAmount > 0 ? (
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-zinc-600">
                   Monthly payment: {formatCurrency(liability.emiAmount)}
                 </p>
               ) : null}

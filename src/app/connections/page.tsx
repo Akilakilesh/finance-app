@@ -106,8 +106,8 @@ export default function ConnectionsPage() {
       <Card className="space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-base font-semibold text-slate-900">Groww</h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <h2 className="text-base font-semibold text-zinc-900">Groww</h2>
+            <p className="mt-1 text-sm text-zinc-500">
               {connection
                 ? `${synced.length} ${synced.length === 1 ? "holding" : "holdings"} synced${
                     connection.lastSyncedAt
@@ -146,7 +146,7 @@ export default function ConnectionsPage() {
 
         {connection?.lastResult ? (
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-zinc-600">
               Last sync added {connection.lastResult.added}, updated{" "}
               {connection.lastResult.updated}
               {connection.lastResult.missing > 0
@@ -155,14 +155,14 @@ export default function ConnectionsPage() {
               .
             </p>
             {connection.lastResult.gaps.length > 0 ? (
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm font-medium text-slate-700">
+              <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">
+                <p className="text-sm font-medium text-zinc-700">
                   What Groww does not give us
                 </p>
-                <ul className="mt-2 space-y-2 text-xs text-slate-600">
+                <ul className="mt-2 space-y-2 text-xs text-zinc-600">
                   {connection.lastResult.gaps.map((gap) => (
                     <li key={gap.area}>
-                      <span className="font-medium text-slate-700">
+                      <span className="font-medium text-zinc-700">
                         {gap.area}:
                       </span>{" "}
                       {gap.reason}
@@ -175,7 +175,7 @@ export default function ConnectionsPage() {
         ) : null}
 
         <form onSubmit={handleConnect} className="space-y-4">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-zinc-600">
             {connection ? "Update your Groww details" : "Connect your Groww account"}{" "}
             using the Trading API. Your key stays in this browser and is only
             sent to Groww when a sync runs.
@@ -243,8 +243,8 @@ export default function ConnectionsPage() {
           </Button>
         </form>
 
-        <div className="rounded-xl border border-slate-200 p-4 text-xs text-slate-500">
-          <p className="text-sm font-medium text-slate-700">
+        <div className="rounded-xl border border-zinc-200 p-4 text-xs text-zinc-500">
+          <p className="text-sm font-medium text-zinc-700">
             What syncs from Groww
           </p>
           <ul className="mt-2 space-y-1">
@@ -266,10 +266,10 @@ export default function ConnectionsPage() {
 
       <Card className="space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">
+          <h2 className="text-base font-semibold text-zinc-900">
             Mutual funds from a file
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-zinc-500">
             Groww&apos;s API does not give out mutual fund folios, so download
             your mutual fund holdings from Groww as a CSV and upload it here.
             Funds are matched on ISIN or folio number, so uploading a newer file
@@ -281,12 +281,12 @@ export default function ConnectionsPage() {
           type="file"
           accept=".csv,text/csv"
           onChange={(e) => void handleFile(e)}
-          className="block w-full text-sm text-slate-600 file:mr-3 file:rounded-xl file:border-0 file:bg-slate-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-slate-700"
+          className="block w-full text-sm text-zinc-600 file:mr-3 file:rounded-xl file:border-0 file:bg-zinc-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-zinc-700"
         />
 
         {growwImport ? (
           <div className="space-y-2">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-zinc-600">
               {growwImport.fileName} · {formatDateTime(growwImport.importedAt)} ·
               added {growwImport.added}, updated {growwImport.updated} ·{" "}
               {importedFunds.length} funds in total.
